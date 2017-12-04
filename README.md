@@ -19,5 +19,5 @@ Additionally, this tutorial guides a reader through a simple example of running 
 
 The complete tutorial document can be found in the resources directory in this repo. See:
 
-![DC/OS SMACK Stack Tutorial](/resources/Mesosphere-SMACK-Stack-Tutorial.pdf?raw=true "DC/OS SMACK Stack Tutorial")
+![Mesosphere-SMACK-Stack-Tutorial.pdf](/resources/Mesosphere-SMACK-Stack-Tutorial.pdf?raw=true "DC/OS SMACK Stack Tutorial")
 

@@ -1,0 +1,4 @@
+{
+    "name": "spark-history",
+    "hdfs-config-url": "http://api.hdfs.marathon.l4lb.thisdcos.directory/v1/endpoints"
+}

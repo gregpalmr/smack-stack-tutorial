@@ -1,0 +1,20 @@
+{
+  "id": "zookeeper-commands",
+  "instances": 1,
+  "portDefinitions": [],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "mesosphere/janitor"
+    }
+  },
+  "cpus": 0.1,
+  "mem": 128,
+  "requirePorts": false,
+  "networks": [],
+  "healthChecks": [],
+  "fetch": [],
+  "constraints": [],
+  "cmd": "/janitor.py -z spark_mesos_dispatcher__spark && /janitor.py -z dcos-service-cassandra && /janitor.py -z dcos-service-hdfs && /janitor.py -z dcos-service-kafka "
+}

@@ -1,0 +1,20 @@
+{
+  "id": "hdfs-dump-test-data",
+  "instances": 1,
+  "portDefinitions": [],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "mesosphere/hdfs-client:1.0.0-2.6.0"
+    }
+  },
+  "mem": 2048,
+  "requirePorts": false,
+  "networks": [],
+  "healthChecks": [],
+  "fetch": [],
+  "constraints": [],
+  "cpus": 1,
+  "cmd": "wget http://api.hdfs.marathon.l4lb.thisdcos.directory:80/v1/endpoints/hdfs-site.xml && wget http://api.hdfs.marathon.l4lb.thisdcos.directory:80/v1/endpoints/core-site.xml && mv hdfs-site.xml /hadoop-2.6.0-cdh5.9.1/etc/hadoop/ && mv core-site.xml /hadoop-2.6.0-cdh5.9.1/etc/hadoop/ && /hadoop-2.6.0-cdh5.9.1/bin/hadoop fs -get hdfs:///test-data/test-data.txt $MESOS_SANDBOX/test-data-out.txt && echo ' ##### CONTENTS OF test-data-out.txt #####' && cat $MESOS_SANDBOX/test-data-out.txt && sleep 200" 
+}

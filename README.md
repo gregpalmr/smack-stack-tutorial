@@ -25,13 +25,13 @@ The complete tutorial document can be found in the resources directory in this r
 
 If you would like to quickly deploy these components you can use the pre-built startup script named start-smackstack.sh Follow these instructions:
 
-# Step 1. Clone this repo on your client computer.
+## Step 1. Clone this repo on your client computer.
 
      $ git clone https://github.com/gregpalmr/smack-stack-tutorial
 
      $ cd smack-stack-tutorial
 
-# Step 2. Start the SMACK Stack Components.
+## Step 2. Start the SMACK Stack Components.
 
 Start the SMACK Stack components with this command:
 
@@ -39,11 +39,13 @@ Start the SMACK Stack components with this command:
 
 The script will wait for all the components to start and then will recommend a Spark job to run.
 
-# Step 3. Run the Spark Job.
+## Step 3. Run the Spark Job.
 
 Run the sample Spark job with this command:
 
      $ scripts/run-sample-spark-hdfs-job.sh
+
+## Step 4. Stop the SMACK Stack Components.
 
 If you would like to stop all the SMACK Stack components, use this command:
 

@@ -208,7 +208,7 @@ echo " ### from the HDFS file system, run the following command: ###"
 echo " #############################################################"
 echo
 
-cat sample-spark-job.txt
+echo "     $ scripts/run-sample-spark-hdfs-job.sh "
 
 echo
 

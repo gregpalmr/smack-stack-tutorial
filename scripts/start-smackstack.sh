@@ -201,9 +201,9 @@ do
 done
 
 echo
-echo " #####################################"
-echo " ### Starting Kafka Consumer       ###"
-echo " #####################################"
+echo " #############################################"
+echo " ### Starting Kafka Producer and Consumer  ###"
+echo " #############################################"
 echo
 echo
 echo " Waiting for Kafka service to start. "
@@ -221,9 +221,16 @@ do
     sleep 10
 done
 
+dcos kafka topic create my-topic --partitions=3 --replication=3
+
+sleep 2
+
 dcos marathon app add config/kafka-consumer.json
 
-sleep 5
+sleep 10
+
+dcos kafka topic producer_test my-topic 100
+
 
 echo
 echo " #############################################################"

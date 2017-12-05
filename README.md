@@ -27,7 +27,7 @@ If you would like to quickly deploy these components you can use the pre-built s
 
 ## Step 1. Deploy a DC/OS cluster.
 
-Deploy a DC/OS cluster with at least nine (9) private agent nodes. The SMACK Stack packages start a lot of tasks and many of the tasks (HDFS namenodes and agentnode, for example) have placement constraints that prohibit them from running on the same agent node. Therefore at least 9 private agent nodes are needed. Instructions for deploying DC/OS clusters can be found here:
+Deploy a DC/OS cluster with at least nine (9) private agent nodes. The SMACK Stack packages start a lot of tasks and many of the tasks (HDFS namenodes and datanodes, for example) have placement constraints that prohibit them from running on the same agent node. Therefore at least 9 private agent nodes are needed. Instructions for deploying DC/OS clusters can be found here:
 
      https://dcos.io/install/
 

@@ -49,9 +49,11 @@ The script will wait for all the components to start and then will recommend a S
 
 ## Step 4. Run the Spark Job.
 
-Run the sample Spark job with this command:
+Run the sample Spark jobs with these commands:
 
      $ scripts/run-sample-spark-hdfs-job.sh
+
+     $ scripts/run-sample-spark-kafka-job.sh
 
 ## Step 5. Stop the SMACK Stack Components.
 

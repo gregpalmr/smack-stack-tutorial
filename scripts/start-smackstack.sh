@@ -201,14 +201,42 @@ do
 done
 
 echo
+echo " #####################################"
+echo " ### Starting Kafka Consumer       ###"
+echo " #####################################"
+echo
+echo
+echo " Waiting for Kafka service to start. "
+while true 
+do
+    task_status=$(dcos task |grep 'kafka-0-broker ' | awk '{print $4}')
+
+    if [ "$task_status" != "R" ]
+    then
+        printf "."
+    else
+        echo " Kafka service is running."
+        break
+    fi
+    sleep 10
+done
+
+dcos marathon app add config/kafka-consumer.json
+
+sleep 5
+
+echo
 echo " #############################################################"
-echo " ### Smack Stack start up complete.                        ###"
+echo " ### SMACK Stack start up complete.                        ###"
 echo " ### If you would like to run a Spark job that reads       ###"
-echo " ### from the HDFS file system, run the following command: ###"
+echo " ### from the HDFS file system or from a Kafka queue,      ###"
+echo " ### run the following commands:                           ###"
 echo " #############################################################"
 echo
 
 echo "     $ scripts/run-sample-spark-hdfs-job.sh "
+echo
+echo "     $ scripts/run-sample-spark-kafka-job.sh "
 
 echo
 

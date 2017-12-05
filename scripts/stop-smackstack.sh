@@ -37,6 +37,11 @@ sleep 2
 dcos package uninstall hdfs --app-id='hdfs' --yes
 
 echo
+echo " ### Stopping Kafka Consumer "
+
+dcos marathon app remove kafka-consumer
+
+echo
 echo " ### Stopping Kafka "
 
 # Kafka 
@@ -49,7 +54,6 @@ echo " ### Stopping Cassandra "
 # Cassandra 
 sleep 2
 dcos package uninstall cassandra --app-id='cassandra' --yes
-
 
 # Zookeeper cleanup
 # First, make sure all services are removed

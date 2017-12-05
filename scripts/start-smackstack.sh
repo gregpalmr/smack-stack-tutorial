@@ -235,7 +235,7 @@ dcos kafka topic producer_test my-topic 100
 echo
 echo " #############################################################"
 echo " ### SMACK Stack start up complete.                        ###"
-echo " ### If you would like to run a Spark job that reads       ###"
+echo " ### If you would like to run a Spark jobs that read       ###"
 echo " ### from the HDFS file system or from a Kafka queue,      ###"
 echo " ### run the following commands:                           ###"
 echo " #############################################################"

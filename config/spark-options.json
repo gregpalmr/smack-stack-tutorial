@@ -7,7 +7,7 @@
     "user": "nobody",
     "docker-image": "mesosphere/spark:2.1.0-2.2.0-1-hadoop-2.6",
     "log-level": "INFO",
-    "spark-history-server-url": "CORE_DCOS_URL/service/spark-history"
+    "spark-history-server-url": "MASTER_URL/service/spark-history"
   },
   "security": {
     "kerberos": {},

@@ -25,13 +25,21 @@ The complete tutorial document can be found in the resources directory in this r
 
 If you would like to quickly deploy these components you can use the pre-built startup script named start-smackstack.sh Follow these instructions:
 
-## Step 1. Clone this repo on your client computer.
+## Step 1. Deploy a DC/OS cluster.
+
+Deploy a DC/OS cluster with at least nine (9) private agent nodes. The SMACK Stack packages start a lot of tasks and many of the tasks (HDFS namenodes and agentnode, for example) have placement constraints that prohibit them from running on the same agent node. Therefore at least 9 private agent nodes are needed. Instructions for deploying DC/OS clusters can be found here:
+
+     https://dcos.io/install/
+
+     https://docs.mesosphere.com/1.10/installing/
+
+## Step 2. Clone this repo on your client computer.
 
      $ git clone https://github.com/gregpalmr/smack-stack-tutorial
 
      $ cd smack-stack-tutorial
 
-## Step 2. Start the SMACK Stack Components.
+## Step 3. Start the SMACK Stack Components.
 
 Start the SMACK Stack components with this command:
 
@@ -39,13 +47,13 @@ Start the SMACK Stack components with this command:
 
 The script will wait for all the components to start and then will recommend a Spark job to run.
 
-## Step 3. Run the Spark Job.
+## Step 4. Run the Spark Job.
 
 Run the sample Spark job with this command:
 
      $ scripts/run-sample-spark-hdfs-job.sh
 
-## Step 4. Stop the SMACK Stack Components.
+## Step 5. Stop the SMACK Stack Components.
 
 If you would like to stop all the SMACK Stack components, use this command:
 

@@ -2,7 +2,7 @@
 
 DC/OS SMACK Stack Tutorial
 
-A beginner's tutorial for running the SMACK Stack on a Mesosphere's DC/OS cluster. Includes steping through a simple deployment process for:
+A beginner's tutorial for running the SMACK Stack on a Mesosphere's DC/OS cluster. Includes stepping through a simple deployment process for:
 
 - Apache Spark
 - Spark History Server

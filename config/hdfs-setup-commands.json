@@ -9,12 +9,12 @@
       "image": "mesosphere/hdfs-client:1.0.0-2.6.0"
     }
   },
+  "cpus": .5,
   "mem": 2048,
   "requirePorts": false,
   "networks": [],
   "healthChecks": [],
   "fetch": [],
   "constraints": [],
-  "cpus": 1,
-  "cmd": "wget http://api.hdfs.marathon.l4lb.thisdcos.directory:80/v1/endpoints/hdfs-site.xml && wget http://api.hdfs.marathon.l4lb.thisdcos.directory:80/v1/endpoints/core-site.xml && mv hdfs-site.xml /hadoop-2.6.0-cdh5.9.1/etc/hadoop/ && mv core-site.xml /hadoop-2.6.0-cdh5.9.1/etc/hadoop/ && /hadoop-2.6.0-cdh5.9.1/bin/hadoop fs -mkdir -p /history && /hadoop-2.6.0-cdh5.9.1/bin/hadoop fs -mkdir -p /test-data && dd if=/dev/urandom of=test-data.txt bs=1048576 count=10 && bin/hadoop fs -put test-data.txt hdfs:///test-data/test-data.txt && echo \"#### HDFS DIRS: ####\" && /hadoop-2.6.0-cdh5.9.1/bin/hadoop fs -ls -R / && sleep 200"
+  "cmd": "wget http://api.hdfs.marathon.l4lb.thisdcos.directory:80/v1/endpoints/hdfs-site.xml && wget http://api.hdfs.marathon.l4lb.thisdcos.directory:80/v1/endpoints/core-site.xml && mv hdfs-site.xml etc/hadoop/ && mv core-site.xml etc/hadoop/ && bin/hadoop fs -mkdir -p /history && bin/hadoop fs -mkdir -p /test-data && dd if=/dev/urandom of=test-data.txt bs=1048576 count=10 && bin/hadoop fs -put test-data.txt hdfs:///test-data/test-data.txt && echo \"#### HDFS DIRS: ####\" && bin/hadoop fs -ls -R / && sleep 200"
 }

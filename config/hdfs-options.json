@@ -1,7 +1,7 @@
 {
   "service": {
     "name": "hdfs",
-    "virtual_network_enabled": true,
+    "virtual_network_enabled": false,
     "virtual_network_name": "dcos",
     "user": "nobody",
     "mesos_api_version": "V0",

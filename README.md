@@ -55,6 +55,19 @@ Run the sample Spark jobs with these commands:
 
      $ scripts/run-sample-spark-kafka-job.sh
 
+These spark jobs utilize the Spark-History server and the Spark External Suffle Service in addition to the using the Spark Dispatcher to launch the Spark Driver program and Spark Executors. The Spark submit-args that are used include the following:
+
+     For enabling the use of the External Shuffle Service
+
+          --conf spark.shuffle.service.enabled=true 
+          --conf spark.local.dir=/tmp/spark
+          --conf spark.dynamicAllocation.enabled=false 
+
+     For enabling the Spark History server
+
+          --conf spark.eventLog.enabled=true 
+          --conf spark.eventLog.dir=hdfs://hdfs/history
+
 ## Step 5. Stop the SMACK Stack Components.
 
 If you would like to stop all the SMACK Stack components, use this command:

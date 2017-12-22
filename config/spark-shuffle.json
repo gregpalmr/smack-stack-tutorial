@@ -8,7 +8,7 @@
     "SPARK_DAEMON_MEMORY": "1024m"
   },
   "acceptedResourceRoles": [ "*" ],
-  "cmd": "/opt/spark/dist/sbin/start-mesos-shuffle-service.sh --conf spark.shuffle.service.enabled=true --conf spark.local.dir=$MESOS_SANDBOX/spark_local_dir --conf spark.network.timeout=10s --conf spark.shuffle.io.connectionTimeout=10s && cd /opt/spark/dist/logs/ && find . -name 'spark--org.apache.spark.deploy.mesos.MesosExternalShuffleService-*.out' -exec tail -f {} \\;",
+  "cmd": "/opt/spark/dist/sbin/start-mesos-shuffle-service.sh --conf spark.shuffle.service.enabled=true --conf spark.local.dir=/tmp/spark --conf spark.network.timeout=10s --conf spark.shuffle.io.connectionTimeout=10s && cd /opt/spark/dist/logs/ && find . -name 'spark--org.apache.spark.deploy.mesos.MesosExternalShuffleService-*.out' -exec tail -f {} \\;",
   "constraints": [
     [
       "hostname", "UNIQUE"
@@ -22,7 +22,7 @@
       "hostPath": "/tmp",
       "mode": "RW"
     }
-   ]
+   ],
    "docker": {
       "image": "mesosphere/spark:2.1.0-2.2.0-1-hadoop-2.6",
       "forcePullImage": false,

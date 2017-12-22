@@ -1,6 +1,9 @@
 {
   "id": "/kafka-consumer",
+  "cpus": 0.1,
+  "mem": 128,
   "instances": 1,
+  "cmd": "echo \"#### KAFKA CONSUMER ####\" && ./kafka-console-consumer.sh --zookeeper master.mesos:2181/dcos-service-kafka --from-beginning --topic my-topic",
   "portDefinitions": [],
   "container": {
     "type": "DOCKER",
@@ -9,12 +12,17 @@
       "image": "mesosphere/kafka-client"
     }
   },
-  "cpus": 0.1,
-  "mem": 128,
   "requirePorts": false,
   "networks": [],
   "healthChecks": [],
   "fetch": [],
   "constraints": [],
-  "cmd": "echo \"#### KAFKA CONSUMER ####\" && ./kafka-console-consumer.sh --zookeeper master.mesos:2181/dcos-service-kafka --from-beginning --topic my-topic"
+  "healthChecks": [
+    {
+      "protocol": "COMMAND",
+      "command": {
+        "value": "ps -ef | grep kafka.tools.ConsoleConsumer | grep -v grep"
+      }
+    }
+  ]
 }

@@ -69,6 +69,34 @@ echo "    DC/OS CLI Setup Correctly "
 echo
 
 echo
+echo " #################################################"
+echo " ###   Checking for at least 10 Private Agents ###"
+echo " #################################################"
+echo
+
+# Get the number of private agent nodes (total nodes - 1)
+PRIV_NODE_COUNT=$(dcos node | grep agent | wc -l)
+if [ "$PRIV_NODE_COUNT" == "" ]
+then
+    echo " ERROR: Number of private agent nodes was not found."
+    echo " Exiting."
+    echo
+    exit 1
+fi
+PRIV_NODE_COUNT=$((PRIV_NODE_COUNT-1))
+
+if [ "$PRIV_NODE_COUNT" -lt 10 ]
+then
+    echo " ERROR: Number of private agent nodes must be 10 or more."
+    echo "        Only showing $PRIV_NODE_COUNT private agent nodes."
+    echo " Exiting."
+    echo
+    exit 1
+fi
+echo
+echo "    DC/OS Agent Node Count is Sufficient."
+
+echo
 echo " ##############################"
 echo " ###   Starting Cassandra   ###"
 echo " ##############################"
@@ -153,7 +181,7 @@ echo " ### Starting Spark History Server ###"
 echo " #####################################"
 echo
 
-dcos package install spark-history --options=config/spark-history-options.json --yes
+dcos marathon app add config/spark-history-options.json
 
 echo
 echo " Waiting for Spark History server to start. "
@@ -166,6 +194,36 @@ do
         printf "."
     else
         echo " Spark History server is running."
+        break
+    fi
+    sleep 10
+done
+
+
+echo
+echo " ###############################################"
+echo " ### Starting Spark External Shuffle Service ###"
+echo " ###############################################"
+echo
+
+
+# Set the instance count as the number private agent nodes
+sed "s/256/$PRIV_NODE_COUNT/" config/spark-shuffle.json > /tmp/spark-shuffle.json
+
+# Start the service
+dcos marathon app add /tmp/spark-shuffle.json
+
+echo
+echo " Waiting for Spark External Shuffle Service to start. "
+while true 
+do
+    task_status=$(dcos task |grep spark-shuffle | awk '{print $4}' | grep R | wc -l)
+
+    if [ "$task_status" -ne $PRIV_NODE_COUNT ]
+    then
+        printf "."
+    else
+        echo " Spark External Shuffle Service is running."
         break
     fi
     sleep 10

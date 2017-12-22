@@ -28,6 +28,10 @@ echo " ### Stopping Spark History Server"
 sleep 2
 dcos package uninstall spark-history --app-id='spark-history' --yes
 
+echo
+echo " ### Stopping Spark External Shuffle Service"
+
+dcos marathon app remove spark-shuffle 
 
 echo
 echo " ### Stopping HDFS "
@@ -77,6 +81,7 @@ done
 
 echo
 echo " ### Removing Metadata in Zookeeper"
+sleep 5
 dcos marathon app add config/zookeeper-commands.json
 
 # End of Script

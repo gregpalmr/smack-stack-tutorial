@@ -101,8 +101,7 @@ if "%PRIV_NODE_COUNT%"=="" (
 
 set /a PRIV_NODE_COUNT -= 1
 
-::if %PRIV_NODE_COUNT% LSS 10 (
-if %PRIV_NODE_COUNT% LSS 9 (
+if %PRIV_NODE_COUNT% LSS 10 (
     echo - ERROR: Number of private agent nodes must be 10 or more.
     echo -        Only showing %PRIV_NODE_COUNT% private agent nodes.
     echo - Exiting.

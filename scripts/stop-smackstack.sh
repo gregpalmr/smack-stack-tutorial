@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# SCRIPT: stop-all.sh
+# SCRIPT: stop-smackstack.sh
 #
 
 echo

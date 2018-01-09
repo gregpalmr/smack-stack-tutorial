@@ -161,9 +161,10 @@ echo
 echo " Waiting for HDFS setup commands to complete. "
 while true 
 do
-    hdfs_files=$(dcos task log hdfs-setup-commands stdout 2>&1 | grep 'test-data.txt')
+    std_out=$(dcos task log hdfs-setup-commands stdout 2>&1 | grep 'test-data.txt')
+    std_err=$(dcos task log hdfs-setup-commands stderr 2>&1 | grep 'test-data.txt')
 
-    if [[ $hdfs_files == *"test-data.txt"* ]]
+    if [[ $std_out == *"test-data.txt"* ]] || [[ $std_err == *"File exists"* ]]
     then
         echo " HDFS setup commands completed successfully."
         break

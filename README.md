@@ -8,7 +8,7 @@ A beginner's tutorial for running the SMACK Stack on a Mesosphere's DC/OS cluste
 - Spark History Server
 - Apache Kafka
 - Apache Cassandra
-- Apache HDFS
+- Apache Hadoop HDFS
 
 Additionally, this tutorial guides a reader through a simple example of running a Spark job that reads a file from the HDFS service and from a Kafka queue. 
 

@@ -236,11 +236,8 @@ echo " ### Starting Spark Service ###"
 echo " ##############################"
 echo
 
-# Modify the spark options file with the core.dcos_url for this cluster
-cat config/spark-options.json | awk -v url="$MASTER_URL" '{gsub(/MASTER_URL/,url)}1' > /tmp/spark-options.json
-
 # Start the spark service
-dcos package install spark --options=/tmp/spark-options.json --yes
+dcos package install spark --options=config/spark-options.json --yes
 
 # Wait for the spark service to get a running status
 echo

@@ -1,7 +1,22 @@
 #!/bin/bash
 #
 # SCRIPT: start-smackstack.sh
+# 
+# USAGE: start-smackstack.sh <no of public agents>
 #
+#
+
+if [ "$1" != "" ]
+then
+    PUBLIC_NODE_COUNT=$1
+else
+    PUBLIC_NODE_COUNT=1
+fi
+
+echo
+echo " ####################################"
+echo " ### Using No of Public Agents: $PUBLIC_NODE_COUNT ###"
+echo " ####################################"
 
 echo
 echo " #################################"
@@ -34,7 +49,7 @@ then
 fi
 
 # Check if the CLI is logged in
-result=$(dcos node 2>&1)
+result=$(dcos node list 2>&1)
 if [[ "$result" == *"No cluster is attached"* ]]
 then
     echo
@@ -70,12 +85,12 @@ echo
 
 echo
 echo " #################################################"
-echo " ###   Checking for at least 10 Private Agents ###"
+echo " ###   Checking for at least 8 Private Agents ###"
 echo " #################################################"
 echo
 
 # Get the number of private agent nodes (total nodes - 1)
-PRIV_NODE_COUNT=$(dcos node | grep agent | wc -l)
+PRIV_NODE_COUNT=$(dcos node list | grep agent | wc -l)
 if [ "$PRIV_NODE_COUNT" == "" ]
 then
     echo " ERROR: Number of private agent nodes was not found."
@@ -83,11 +98,11 @@ then
     echo
     exit 1
 fi
-PRIV_NODE_COUNT=$((PRIV_NODE_COUNT-1))
+PRIV_NODE_COUNT=$((PRIV_NODE_COUNT-$PUBLIC_NODE_COUNT))
 
-if [ "$PRIV_NODE_COUNT" -lt 10 ]
+if [ "$PRIV_NODE_COUNT" -lt 8 ]
 then
-    echo " ERROR: Number of private agent nodes must be 10 or more."
+    echo " ERROR: Number of private agent nodes must be 8 or more."
     echo "        Only showing $PRIV_NODE_COUNT private agent nodes."
     echo " Exiting."
     echo
@@ -124,13 +139,13 @@ echo " Waiting for HDFS service to start. "
 while true 
 do
     # Get the number of data nodes
-    datanode_count=$(dcos task | grep data- | wc -l)
+    datanode_count=$(dcos task | grep hdfs__data- | wc -l)
 
     if [ "$datanode_count" -gt 0 ]
     then
         last_datanode=$(($datanode_count-1))
 
-        task_status=$(dcos task |grep data-${last_datanode}-node | awk '{print $4}')
+        task_status=$(dcos task |grep hdfs__data-${last_datanode}-node | awk '{print $4}')
 
         if [ "$task_status" != "R" ]
         then
@@ -182,7 +197,9 @@ echo " ### Starting Spark History Server ###"
 echo " #####################################"
 echo
 
-dcos marathon app add config/spark-history-options.json
+sleep 2
+
+dcos package install --options=config/spark-history-options.json spark-history --yes
 
 echo
 echo " Waiting for Spark History server to start. "
@@ -215,7 +232,7 @@ sed "s/256/$PRIV_NODE_COUNT/" config/spark-shuffle.json > /tmp/spark-shuffle.jso
 dcos marathon app add /tmp/spark-shuffle.json
 
 echo
-echo " Waiting for Spark External Shuffle Service to start. "
+echo " WPRIV_NODE_COUNT/aiting for Spark External Shuffle Service to start. "
 while true 
 do
     task_status=$(dcos task |grep spark-shuffle | awk '{print $4}' | grep R | wc -l)

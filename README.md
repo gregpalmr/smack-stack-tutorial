@@ -43,7 +43,7 @@ Deploy a DC/OS cluster with at least ten (10) private agent nodes. The SMACK Sta
 
 Start the SMACK Stack components with this command:
 
-     $ scripts/start-smackstack.sh
+     $ scripts/start-smackstack.sh <no of public agent nodes>
 
 The script will wait for all the components to start and then will recommend a Spark job to run.
 

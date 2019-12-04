@@ -1,21 +1,31 @@
 {
   "service": {
     "name": "hdfs",
+    "user": "nobody",
+    "service_account": "",
+    "service_account_secret": "",
     "virtual_network_enabled": false,
     "virtual_network_name": "dcos",
-    "user": "nobody",
-    "mesos_api_version": "V0",
-    "deploy_strategy": "parallel",
-    "update_strategy": "serial",
+    "virtual_network_plugin_labels": "",
     "log_level": "INFO",
-    "tls": {
-      "enabled": false
+    "deploy_strategy": "parallel",
+    "region": "",
+    "security": {
+      "kerberos": {
+        "enabled": false,
+        "kdc": {},
+        "primary": "hdfs",
+        "debug": false
+      },
+      "transport_encryption": {
+        "enabled": false,
+        "allow_plaintext": false
+      }
     },
-    "kerberos": {
-      "enabled": false,
-      "primary": "hdfs",
-      "primary_http": "HTTP",
-      "realm": "LOCAL"
+    "check": {
+      "intervalSeconds": 30,
+      "timeoutSeconds": 20,
+      "delaySeconds": 15
     }
   },
   "journal_node": {
@@ -24,13 +34,27 @@
     "disk": 5000,
     "disk_type": "ROOT",
     "enable_readiness_check": true,
-    "lagging_tx_count": "0"
+    "readiness_check": {
+      "interval": 30,
+      "delay": 30,
+      "timeout": 60
+    },
+    "lagging_tx_count": "0",
+    "placement": "[]",
+    "hadoop_journalnode_opts": "",
+    "rlimits": {
+      "rlimit_nofile": {
+        "soft": 128000,
+        "hard": 128000
+      }
+    }
   },
   "name_node": {
     "cpus": 0.3,
     "mem": 2048,
     "disk": 5000,
     "disk_type": "ROOT",
+    "hadoop_namenode_opts": "",
     "logging_level": "info",
     "heartbeat_recheck_interval": "60000",
     "replication_considerLoad": true,
@@ -48,12 +72,14 @@
     "safemode_extension": "30000",
     "resource_check_interval": "5000",
     "resource_du_reserved": "104857600",
+    "resource_checked_volumes": "",
     "resource_checked_volumes_minimum": "1",
     "max_objects": "0",
     "decommission_interval": "30",
     "decommission_blocks_per_interval": "500000",
     "replication_interval": "3",
     "accesstime_precision": "3600000",
+    "plugins": "",
     "checkpoint_period": "3600",
     "checkpoint_txns": "1000000",
     "checkpoint_check_period": "60",
@@ -89,7 +115,20 @@
     "fs-limits_max-attrs-size": "16384",
     "startup_delay_block_deletion_sec": "0",
     "list_encryption_zones_num_responses": "100",
-    "inotify_max_events_per_rpc": "1000"
+    "inotify_max_events_per_rpc": "1000",
+    "legacy-oiv-image_dir": "",
+    "placement": "[]",
+    "readiness_check": {
+      "interval": 5,
+      "delay": 0,
+      "timeout": 180
+    },
+    "rlimits": {
+      "rlimit_nofile": {
+        "soft": 128000,
+        "hard": 128000
+      }
+    }
   },
   "zkfc_node": {
     "cpus": 0.3,
@@ -106,6 +145,7 @@
     "directoryscan_interval": "21600",
     "directoryscan_threads": "1",
     "balance_bandwidthPerSec": "1048576",
+    "plugins": "",
     "failed_volumes_tolerated": "0",
     "max_transfer_threads": "4096",
     "readahead_bytes": "4193404",
@@ -115,6 +155,7 @@
     "use_datanode_hostname": false,
     "shared_file_descriptor_paths": "/dev/shm,/tmp",
     "hdfs-blocks-metadata_enabled": false,
+    "fsdataset_volume_choosing_policy": "org.apache.hadoop.hdfs.server.datanode.fsdataset.RoundRobinVolumeChoosingPolicy",
     "available-space-volume-choosing-policy_balanced-space-threshold": "10737418240",
     "available-space-volume-choosing-policy_balanced-space-preference-fraction": "0.75f",
     "max_locked_memory": "0",
@@ -122,18 +163,36 @@
     "slow_io_warning_threshold_ms": "300",
     "cache_revocation_timeout_ms": "900000",
     "cache_revocation_polling_ms": "500",
-    "block_id_layout_upgrade_threads": "12"
+    "block_id_layout_upgrade_threads": "12",
+    "placement": "[]",
+    "hadoop_datanode_opts": "",
+    "readiness_check": {
+      "interval": 10,
+      "delay": 120,
+      "timeout": 60
+    },
+    "rlimits": {
+      "rlimit_nofile": {
+        "soft": 128000,
+        "hard": 128000
+      }
+    }
   },
   "hdfs": {
-    "administrators": "core,centos,azureuser",
+    "administrators": "core,centos,azureuser,hdfs,nobody",
     "name_node_rpc_port": "9001",
     "name_node_http_port": "9002",
+    "name_node_https_port": "9003",
     "zkfc_port": "8019",
     "journal_node_rpc_port": "8485",
     "journal_node_http_port": "8480",
+    "journal_node_https_port": "8481",
     "data_node_rpc_port": "9003",
     "data_node_http_port": "9004",
+    "data_node_https_port": "9006",
     "data_node_ipc_port": "9005",
+    "hadoop_opts": "",
+    "hadoop_heapsize": 1000,
     "permissions_enabled": false,
     "compress_image": true,
     "image_compression_codec": "org.apache.hadoop.io.compress.SnappyCodec",
@@ -144,6 +203,10 @@
     "namenode_http-bind-host_name_node_0": "0.0.0.0",
     "namenode_http-bind-host_name_node_1": "0.0.0.0",
     "hadoop_hdfs_configuration_version": "1",
+    "namenode_servicerpc_address_namenode_0": "",
+    "namenode_servicerpc_address_namenode_1": "",
+    "namenode_servicerpc_bind_host_namenode_0": "",
+    "namenode_servicerpc_bind_host_namenode_1": "",
     "client_cached_conn_retry": "3",
     "https_server_keystore_resource": "ssl-server.xml",
     "client_https_keystore_resource": "ssl-client.xml",
@@ -163,6 +226,8 @@
     "blockreport_initialDelay": "0",
     "blockreport_split_threshold": "1000000",
     "heartbeat_interval": "3",
+    "hosts": "",
+    "hosts_exclude": "",
     "stream-buffer-size": "4096",
     "bytes-per-checksum": "512",
     "client-write-packet-size": "65536",
@@ -180,14 +245,24 @@
     "ha_tail-edits_period": "60",
     "support_append": true,
     "client_use_datanode_hostname": false,
+    "client_local_interfaces": "",
     "short_circuit_shared_memory_watcher_interrupt_check_ms": "60000",
     "webhdfs_enabled": true,
     "fuse_connection_timeout": "300",
     "fuse_timer_period": "5",
+    "metrics_percentiles_intervals": "",
     "encrypt_data_transfer": false,
+    "encrypt_data_transfer_algorithm": "",
+    "encrypt_data_transfer_cipher_suites": "",
     "encrypt_data_transfer_cipher_key_bitlength": "128",
+    "trustedchannel_resolver_class": "",
+    "data_transfer_protection": "",
+    "data_transfer_saslproperties_resolver_class": "",
     "client_file-block-storage-locations_num-threads": "10",
     "client_file-block-storage-locations_timeout_millis": "1000",
+    "client_cache_drop_behind_writes": "",
+    "client_cache_drop_behind_reads": "",
+    "client_cache_readahead": "",
     "client_mmap_enabled": true,
     "client_mmap_cache_size": "256",
     "client_mmap_cache_timeout_ms": "3600000",
@@ -200,30 +275,31 @@
     "client_read_shortcircuit_skip_checksum": false,
     "client_read_shortcircuit_streams_cache_size": "256",
     "client_read_shortcircuit_streams_cache_expiry_ms": "300000",
+    "block_local-path-access_user": "",
     "client_domain_socket_data_traffic": false,
     "client_slow_io_warning_threshold_ms": "30000",
+    "encryption_key_provider_uri": "",
     "storage_policy_enabled": true,
     "common_configuration_version": "0.23.0",
-    "tmp_dir": "/tmp/hadoop-${user.name}",
-    "http_filter_initializer": "org.apache.hadoop.http.lib.StaticUserWebFilter",
-    "security_authorization": false,
-    "security_instrumentation_requires_admin": false,
-    "security_authentication": "simple",
+    "tmp_dir": "/tmp/hadoop-$(whoami)",
+    "http_filter_initializer": "org.apache.hadoop.security.AuthenticationFilterInitializer",
+    "security_authorization": true,
     "security_group_mapping": "org.apache.hadoop.security.JniBasedUnixGroupsMappingWithFallback",
     "security_groups_cache_secs": "300",
     "security_groups_negative-cache_secs": "30",
     "security_groups_cache_warn_after_ms": "5000",
-    "security_group_mapping_ldap_ssl": false,
-    "security_group_mapping_ldap_search_attr_member": "member",
-    "security_group_mapping_ldap_search_attr_group_name": "cn",
-    "security_group_mapping_ldap_directory_search_timeout": "10000",
+    "security_service_user_name_key": "",
     "security_service_uid_cache_secs": "14400",
     "rpc_protection": "authentication",
+    "security_saslproperties_resolver_class": "",
     "work_around_non_threadsafe_getpwuid": false,
     "kerberos_kinit_command": "kinit",
+    "hadoop_security_instrumentation_requires_admin": false,
+    "security_auth_to_local": "",
     "io_file_buffer_size": "4096",
     "io_bytes_per_checksum": "512",
     "io_skip_checksum_errors": false,
+    "io_compression_codecs": "",
     "io_compression_codec_bzip2_library": "system-native",
     "io_serializations": "org.apache.hadoop.io.serializer.WritableSerialization,org.apache.hadoop.io.serializer.avro.AvroSpecificSerialization,org.apache.hadoop.io.serializer.avro.AvroReflectSerialization",
     "io_seqfile_local_dir": "${hadoop.tmp.dir}/io/local",
@@ -249,6 +325,9 @@
     "fs_s3n_multipart_uploads_enabled": false,
     "fs_s3n_multipart_uploads_block_size": "67108864",
     "fs_s3n_multipart_copy_block_size": "5368709120",
+    "fs_s3n_server-side-encrpytion-algorithm": "",
+    "fs_s3n_access_key": "",
+    "fs_s3n_secret_key": "",
     "fs_s3n_connection_maximum": "15",
     "fs_s3n_connection_ssl_enabled": true,
     "fs_s3n_attempts_maximum": "10",
@@ -256,6 +335,7 @@
     "fs_s3n_paging_maximum": "5000",
     "fs_s3n_multipart_size": "104857600",
     "fs_s3n_multipart_threshold": "2147483647",
+    "fs_s3n_acl_default": "",
     "fs_s3n_multipart_purge": false,
     "fs_s3n_multipart_purge_age": "86400",
     "fs_s3n_buffer_dir": "${hadoop.tmp.dir}/s3a",
@@ -266,6 +346,7 @@
     "io_seqfile_bloom_size": "1048576",
     "io_seqfile_bloom_error_rate": "0.005",
     "hadoop_util_hash_type": "murmur",
+    "ipc_maximum_data_length": "67108864",
     "ipc_client_idlethreshold": "4000",
     "ipc_client_kill_max": "10",
     "ipc_client_connection_maxidletime": "10000",
@@ -273,10 +354,10 @@
     "ipc_client_connect_timeout": "20000",
     "ipc_client_connect_max_retries_on_timeouts": "45",
     "ipc_server_listen_queue_size": "45",
+    "hadoop_security_impersonation_provider_class": "",
     "hadoop_rpc_socket_factory_class_default": "org.apache.hadoop.net.StandardSocketFactory",
-    "net_topology_node_switch_mapping_impl": "org.apache.hadoop.net.ScriptBasedMapping",
-    "net_topology_impl": "org.apache.hadoop.net.NetworkTopology",
-    "net_topology_script_number_args": "100",
+    "hadoop_rpc_socket_factory_class_client-protocol": "",
+    "hadoop_socks_server": "",
     "file_stream-buffer-size": "4096",
     "file_bytes-per-checksum": "512",
     "file_client-write-packet-size": "65536",
@@ -300,13 +381,13 @@
     "tfile_io_chunk_size": "1048576",
     "tfile_io_output_buffer_size": "262144",
     "tfile_fs_input_buffer_size": "262144",
-    "hadoop_http_authentication_type": "simple",
     "hadoop_http_authentication_token_validity": "36000",
-    "hadoop_http_authentication_signature_secret_file": "${user.home}/hadoop-http-auth-signature-secret",
+    "hadoop_http_authentication_cookie_domain": "",
     "hadoop_http_authentication_simple_anonymous_allowed": true,
     "hadoop_http_authentication_kerberos_principal": "HTTP/_HOST@LOCALHOST",
     "hadoop_http_authentication_kerberos_keytab": "${user.home}/hadoop.keytab",
     "dfs_ha_fencing_ssh_connect-timeout": "30000",
+    "dfs_ha_fencing_ssh_private-key-files": "",
     "hadoop_http_staticuser_user": "dr.who",
     "ha_zookeeper_session-timeout-ms": "5000",
     "hadoop_ssl_keystores_factory_class": "org.apache.hadoop.security.ssl.FileBasedKeyStoresFactory",
@@ -324,6 +405,8 @@
     "ipc_client_fallback-to-simple-auth-allowed": false,
     "fs_client_resolve_remote_symlinks": true,
     "nfs_exports_allowed_hosts": "* rw",
-    "rpc_metrics_quantile_enable": false
+    "hadoop_user_group_static_mapping_overrides": "",
+    "rpc_metrics_quantile_enable": false,
+    "rpc_metrics_percentiles_intervals": ""
   }
 }

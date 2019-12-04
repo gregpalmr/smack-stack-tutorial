@@ -1,90 +1,25 @@
 {
-  "id": "/spark-history",
-  "cpus": 1,
-  "disk": 0,
-  "instances": 1,
-  "cmd": "SPARK_HISTORY_OPTS=\"-Dspark.history.ui.port=${PORT0} ${SPARK_HISTORY_OPTS}\" ./bin/spark-class org.apache.spark.deploy.history.HistoryServer",
-  "container": {
-    "type": "DOCKER",
-    "volumes": [],
-    "docker": {
-      "image": "mesosphere/spark:1.0.8-2.1.0-1-hadoop-2.6",
-      "forcePullImage": false,
-      "privileged": false,
-      "parameters": [
-        {
-          "key": "user",
-          "value": "root"
-        }
-      ]
-    }
-  },
-  "backoffFactor": 1.15,
-  "backoffSeconds": 1,
-  "env": {
-    "APPLICATION_WEB_PROXY_BASE": "/service/spark-history",
-    "SPARK_HISTORY_OPTS": "-Dspark.history.fs.logDirectory=hdfs://hdfs/history -Dspark.history.fs.cleaner.enabled=false -Dspark.history.fs.cleaner.interval=1d -Dspark.history.fs.cleaner.maxAge=7d"
-  },
-  "fetch": [
-    {
-      "uri": "http://api.hdfs.marathon.l4lb.thisdcos.directory/v1/endpoints/hdfs-site.xml",
-      "extract": false,
-      "executable": false,
-      "cache": false
+  "service": {
+    "name": "spark-history",
+    "cpus": 1,
+    "mem": 1024,
+    "log-dir": "hdfs://hdfs/history",
+    "user": "nobody",
+    "docker-image": "mesosphere/spark:2.9.0-2.4.3-scala-2.11-hadoop-2.9",
+    "cleaner": {
+      "enabled": false,
+      "interval": "1d",
+      "max-age": "7d"
     },
-    {
-      "uri": "http://api.hdfs.marathon.l4lb.thisdcos.directory/v1/endpoints/core-site.xml",
-      "extract": false,
-      "executable": false,
-      "cache": false
-    }
-  ],
-  "labels": {
-    "DCOS_PACKAGE_OPTIONS": "eyJoZGZzLWNvbmZpZy11cmwiOiJodHRwOi8vYXBpLmhkZnMubWFyYXRob24ubDRsYi50aGlzZGNvcy5kaXJlY3RvcnkvdjEvZW5kcG9pbnRzIiwibmFtZSI6InNwYXJrLWhpc3RvcnkifQ==",
-    "DCOS_SERVICE_SCHEME": "http",
-    "DCOS_PACKAGE_SOURCE": "https://universe.mesosphere.com/repo",
-    "DCOS_PACKAGE_METADATA": "eyJwYWNrYWdpbmdWZXJzaW9uIjoiMy4wIiwibmFtZSI6InNwYXJrLWhpc3RvcnkiLCJ2ZXJzaW9uIjoiMi4xLjAtMSIsIm1haW50YWluZXIiOiJzdXBwb3J0QG1lc29zcGhlcmUuaW8iLCJkZXNjcmlwdGlvbiI6IlRoZSBBcGFjaGUgU3BhcmsgSGlzdG9yeSBTZXJ2ZXIgYWxsb3dzIHlvdSB0byB2aWV3IHRoZSBzdGF0ZSBvZiBydW5uaW5nIGFuZCBjb21wbGV0ZWQgU3Bhcmsgam9icy4iLCJ0YWdzIjpbImJpZ2RhdGEiLCJtYXByZWR1Y2UiLCJiYXRjaCIsImFuYWx5dGljcyJdLCJzZWxlY3RlZCI6ZmFsc2UsInNjbSI6Imh0dHBzOi8vZ2l0aHViLmNvbS9hcGFjaGUvc3BhcmsuZ2l0Iiwid2Vic2l0ZSI6Imh0dHBzOi8vZG9jcy5tZXNvc3BoZXJlLmNvbS9zZXJ2aWNlLWRvY3Mvc3BhcmsvIiwiZnJhbWV3b3JrIjpmYWxzZSwicHJlSW5zdGFsbE5vdGVzIjoiVGhpcyBEQy9PUyBTZXJ2aWNlIGlzIGN1cnJlbnRseSBpbiBwcmV2aWV3LiIsInBvc3RJbnN0YWxsTm90ZXMiOiJUaGUgQXBhY2hlIFNwYXJrIEhpc3RvcnkgU2VydmVyIGlzIGJlaW5nIGluc3RhbGxlZCEiLCJwb3N0VW5pbnN0YWxsTm90ZXMiOiJUaGUgQXBhY2hlIFNwYXJrIEhpc3RvcnkgU2VydmVyIGhhcyBiZWVuIHVuaW5zdGFsbGVkIGFuZCB3aWxsIG5vIGxvbmdlciBydW4uIiwibGljZW5zZXMiOlt7Im5hbWUiOiJBcGFjaGUgTGljZW5zZSBWZXJzaW9uIDIuMCIsInVybCI6Imh0dHBzOi8vcmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbS9hcGFjaGUvc3BhcmsvbWFzdGVyL0xJQ0VOU0UifV19",
-    "DCOS_SERVICE_NAME": "spark-history",
-    "DCOS_SERVICE_PORT_INDEX": "0",
-    "DCOS_PACKAGE_DEFINITION": "eyJtZXRhZGF0YSI6eyJDb250ZW50LVR5cGUiOiJhcHBsaWNhdGlvbi92bmQuZGNvcy51bml2ZXJzZS5wYWNrYWdlK2pzb247Y2hhcnNldD11dGYtODt2ZXJzaW9uPXYzIiwiQ29udGVudC1FbmNvZGluZyI6Imd6aXAifSwiZGF0YSI6Ikg0c0lBQUFBQUFBQUFKVlhmM1BpT0JMOUtqcisycTBhd0NiRDVweWFtN3BBTUlFaFRNRFlKdDdhdXBKdGdSWExsdGVTUTBocXZ2dTFaRWdnTUZOM1ZGRVkvWGpkL2JxbGZuNXRGRGhLOFpybWE0K1Vndks4Y2RXNGFCbU5UNDBjWndUK2lBS1hhVE9oUXZKeUM4TlBiOHM2TGJObE5FMFlLd2tqV0pBM0JPTlRJOE0wbC9BbHBjS29pb0tYOHQ4WkVWd1VDU2xKaTNMWUZ4TVJsYlNRTmQ0aUllZ2EzSUVmUnhsRnQ3VlI1SkFTckNMTUdOOEl0T1VWa2h3OVViSkJFdFlLaVNWQmZJWEtLczhoRG9UekdFVThLeGlSSk41QlBmSlF0TUNpeEd2UnVQcXpFZEoxakNWdUtFZUxrc1JWUk9BNXhESks0QmZubUcwbGpVVGpyMDhOQWNGRmdOUzR5aXZHNEgrVWdiT0psSVc0YXJmWFZDWlYyQUo3YmF4OWIydkNXakFPUUJzU0Npckp3ZnFZUjZKMXdJUGFLQ0ErR3BHbW1xdTN0Mkh2cW9RRWJIaVo3ZzJEbjZNY29tVnN5aVVSbWpFcTBFMi8vZDNSSEFFR2dvR29La3VTUzdaRk5FZXdTVEdsWWkrNGtDY0F2NlljMEVLaU9LWDFQaEwvWXdmazV2VC9nMHF3d2lJNXF2STNNSjJxRFdVTTVSd3hucTloSFdSUk9jc2dtRndvNUQ5Zjk2VzRnNS9VVTJoWGJxaWp5N1VxMlFITkpkNjA2dFJVd0c3RWN3bU1uR1NwbldFaFNkbWVqUHFEcVROby9JQjBaelMvaWJpWWZ5anBodG02MU5WU1lwbW9nZGZHVStlNktPNHFpQVVBRndRS0R1dFVROUxXby83MWVwU3hkUFFJejdtOERETmJCa3ZUR3RITk56M1hIejlHdDk2TG1pY1hVait2bG9ib1V6VjNUVVBmazdzNUdmaW10WExlOTRYK2pINm4xOVExZXowM2xTdG53QmJld0hKOHo3cDM3Zm5pM3R2UWlUdC9pWWIyRm0rN0hDK25Sbmd4N2s1eXI1amt2YWNvbjFuald6bGJtR1AzN3RaWXcvUENIZGlPQSs0NTN0U0Y4V0JwV0RQUG5sckwvbWc5b1JiRi91ZW42S0tYUkptUUQ1M25KTHE0V3dObVBzbnN6WU0vNVlIVDNkdExnMlZQaEJkcGhZZnNKUjVhVytKMFIzc2YzSTYzalROdmU4QURDL01IaUtkM3VZdTkvcWIyekIwOGoyZUc3VHF1OVgxcHh2YU1XVE0zdFI0Z3p2N01tOXFhVzJxOUJNdHhCL3RUTnJrNHgzUE41OCs0cWpITXdTNjJRNSt6YU5zVllTY2U0T1dZUFZ6TWdiZlVnbnpBV0NTRElkdEN2dFpuZWM2Q2wwazJGWUZ2VjhGeVZBVitOM25Jbmxsd1kxNlN6cG54Vy9DMy8xTWZIc09obDRUQTJTUmpWVHhVL05uaWZpa3ZJUS9zd2UreWlIYUxNSit6S0ErUzhIL0dNaE15c1BOZ2NleFQ2TnVmSno2TUt3N1hkUjBmMU40RzRqT2k3ZWlQa1MwMnk4T2E3SFNOQjU4cGpOTmM1dk51TkhSMXpjNEgxbzFqZU03SC9BUkQ2eEZEYmVpYTM1K2ZnM25zbTBuUXFURWdCMm5ZbVpaZ1M5YmpIcHlQa1RpeVdmc0Yvc3d2d09kUzV6bE43bDF6UmlmWHAvZ3FodysreVJTL3UvaStmVmlqdjJkODI5c0NmMUx0WDd5Y1FrN08rYlBuUStYSlkvdTdRYS9QMy9rKy92YXNFeHpiK0hZNjM3UGU0c3Flb2E0OG9lTzRQWW9EK0o4Q0I5Wmk3bzE5eDUzYVM2UGJXN2h2dkZhS0E2anJEeHlOQnpQRFdpek5xZTJ5QU02a3QzTGhESG0yTlY2a2M5dnZnNTMrYVBNeHB5ZTJ6T21OTS9DbWMwZXRIL1A0ZHI0NVUyTm1sREY5TC9yYk1kUm1rZ2I1SGR3NVZoVmtMSjhzdmEycThjbHVQT293QSs2ZXo2RVBkMTVmeDhDRElady9mL29VWmtFUmJFM0FlNGI2c0I2aER0aGtPUzNpb1Z1Um9TbEd6UGkybXZGL05YNG9CU040VllJSTJQVmE2QmdydWxhM3ZOd1c2bExuNFNPb0FOWDhTbDZRVWxMVm12YWQ2UldVekFwWFRKN1JTNmNhQnhjRlV2dlFpcGRhd1p6cmx5MkUxTnFkTktpYlpBaDduekJsT0dUd0pKRnFkdERydnNUUXIvNEQvZS9yWGttMHZ5ajhyMHBGN053WHNvUTJyaUtOaWtvY2VXeCs5TEYvN3lLUllLQ2tvZHNoelNwUVBFYkxlRVBMcXl3RVlRZG9HY21Pd1l6T1o3WHdHUEdPWkNxeTMrNTZ2eDlDN2hlZm9ESytic2EwckpFUGdYclFraEhNUUNvVW9GU3FnYWVhU00wN0lrL1E1d1dRNThMZHgwQUNZWlFUcVZRVXFJMzNqWXltQk4zZTJBNnNWQUlHMGdCOFNpV24zaGRsME5vUmVZYTBnSXFpS2xkOHI0T1VKTktyYS9WTVdpZE1mem9vaVNSZUtVMmlmdHI3d29Bb2xUSTVEUkcwbko3NEZXREp1VlFJSUJoVFVqWnBCaTZjSXQzb1dhUm5sZStnck1CL2lOZ2hCTzJGa2hLdk5ZeFdSMlg3WFp2dU5KS1N6RzFOTWRmSTR0ZkJmdHgvQlM4SnJYODJkeThMelFUSG5CZnc5dzhWZ0tLa1daKzFwaFp3cjJlUUQyTnk1eE8wU1dpVTZKTkJCTklJU21PM25qTzJrLzRsZVIvNWpiWklDMzM1WU9ociszaWZTSGpGNGpyWnYrdFRBdW92cjlQejZ3dUE1T28weHFmc093V0o2QXBXZ2I4RVR2blBqL3JlT3FCU0h0TkkxNjEyQUZWRlhkRlE1bXVCVmlYUGtOcDVYSEVoNTJyeFlSWldtQWtDWWNBN0dKakE3UGlLTXVNVFh1MlMvRjJSUE5yKzNFc1F1VkVxZENHc0tJTzRvS1Jpb2w2eVRndEMzUXo0dWZsV2xudkxsNmVXOTFacVRNNWl6UlRFcnMvWC90NnJEY1ZuTE1GSFhkOS9WM0J1WS9WcTk3R20vbExwNUZrR3RWSGY3ai8rQ3dGTEpjejFEZ0FBIn0=",
-    "DCOS_PACKAGE_VERSION": "2.1.0-1",
-    "DCOS_PACKAGE_NAME": "spark-history"
+    "hdfs-config-url": "http://api.hdfs.marathon.l4lb.thisdcos.directory/v1/endpoints"
   },
-  "maxLaunchDelaySeconds": 3600,
-  "mem": 1024,
-  "gpus": 0,
-  "networks": [
-    {
-      "mode": "host"
+  "security": {
+    "kerberos": {
+      "enabled": false,
+      "kdc": {},
+      "krb5conf": "",
+      "principal": "",
+      "keytab": ""
     }
-  ],
-  "portDefinitions": [
-    {
-      "protocol": "tcp",
-      "port": 10003
-    }
-  ],
-  "requirePorts": false,
-  "upgradeStrategy": {
-    "maximumOverCapacity": 1,
-    "minimumHealthCapacity": 1
-  },
-  "killSelection": "YOUNGEST_FIRST",
-  "unreachableStrategy": {
-    "inactiveAfterSeconds": 0,
-    "expungeAfterSeconds": 0
-  },
-  "healthChecks": [
-    {
-      "gracePeriodSeconds": 300,
-      "intervalSeconds": 60,
-      "maxConsecutiveFailures": 3,
-      "portIndex": 0,
-      "timeoutSeconds": 20,
-      "delaySeconds": 15,
-      "protocol": "MESOS_HTTP",
-      "path": "/"
-    }
-  ],
-  "constraints": []
+  }
 }
